@@ -4,6 +4,7 @@
   "description": "NDX off-chain polling app monorepo",
   "main": "index.js",
   "scripts": {
+    "start": "cd api && yarn prod:migrate && yarn prod:start",
     "install:common": "cd common && yarn install && cd ..",
     "install:web": "cd web && yarn install && cd ..",
     "install:api": "cd api && yarn install && cd ..",

@@ -16,7 +16,9 @@
     "test:down": "docker-compose --project-name=ndx-poll-api-test down && docker ps",
     "test:migrate": "yarn env-cmd -f .env.test ts-node src/db/migrator.ts",
     "ci:test": "LOG_LEVEL=silent yarn env-cmd -f .env.ci yarn jest --ci --colors --coverage --forceExit --runInBand --detectOpenHandles",
-    "ci:test:migrate": "yarn env-cmd -f .env.ci ts-node src/db/migrator.ts"
+    "ci:test:migrate": "yarn env-cmd -f .env.ci ts-node src/db/migrator.ts",
+    "prod:migrate": "node src/db/migrator.js",
+    "prod:start": "node src/index.js"
   },
   "author": "Kevin Tjiam <kevin@kevincharm.com>",
   "license": "UNLICENSED",
