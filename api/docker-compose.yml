@@ -1,0 +1,31 @@
+version: "3"
+services:
+  postgres:
+    image: "postgres:11"
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./.postgres:/var/lib/postgresql:z
+    environment:
+      - "POSTGRES_USER=username"
+      - "POSTGRES_PASSWORD=password"
+      - "POSTGRES_DB=ndx_poll"
+  redis:
+    image: "redis:5"
+    command: ["redis-server", "--appendonly", "yes"]
+    restart: always
+    volumes:
+      - ./.redis:/data:z
+    ports:
+      - "6379:6379"
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./.minio:/export:z
+    environment:
+      - "MINIO_ACCESS_KEY=TESTACCESS"
+      - "MINIO_SECRET_KEY=TESTSECRET"
+    command: server /export

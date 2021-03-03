@@ -1,0 +1,5 @@
+.postgres
+.redis
+.minio
+.minio_test
+coverage

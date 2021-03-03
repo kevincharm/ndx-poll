@@ -1,0 +1,19 @@
+{
+  "name": "ndx-poll-common",
+  "version": "1.0.0",
+  "description": "Common code (e.g. interfaces) shared between NDX Poll projects.",
+  "scripts": {
+    "check:format": "yarn prettier --check \"src/**/*.ts\"",
+    "check:compile": "yarn tsc --noEmit"
+  },
+  "author": "Kevin Tjiam <kevin@kevincharm.com>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "typescript": "^4.0.2"
+  },
+  "dependencies": {
+    "uuid": "^8.2.0",
+    "zod": "^1.11.9"
+  }
+}

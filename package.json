@@ -1,0 +1,23 @@
+{
+  "name": "ndx-poll",
+  "version": "1.0.0",
+  "description": "NDX off-chain polling app monorepo",
+  "main": "index.js",
+  "scripts": {
+    "install:common": "cd common && yarn install && cd ..",
+    "install:web": "cd web && yarn install && cd ..",
+    "install:api": "cd api && yarn install && cd ..",
+    "postinstall": "yarn install:common && yarn install:web && yarn install:api"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "https://indexed.finance"
+}

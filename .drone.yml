@@ -1,0 +1,200 @@
+---
+kind: pipeline
+type: docker
+name: Web Frontend
+
+trigger:
+  event:
+    exclude:
+      - pull_request
+
+volumes:
+  - name: cache
+    host:
+      path: /drone-cache
+
+steps:
+  - name: restore-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: cache
+        path: /cache
+    settings:
+      restore: true
+      mount:
+        - ./common/node_modules
+        - ./web/node_modules
+  - name: install-deps
+    image: node:14
+    commands:
+      - sleep 5
+      - cd common
+      - yarn install
+      - cd ..
+      - cd web
+      - yarn install
+  - name: rebuild-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: cache
+        path: /cache
+    settings:
+      rebuild: true
+      mount:
+        - ./common/node_modules
+        - ./web/node_modules
+  - name: check
+    image: node:14
+    commands:
+      - cd web
+      - yarn check:format
+      - yarn check:compile
+  - name: test
+    image: node:14
+    commands:
+      - cd web
+      - yarn ci:test
+  - name: build-app
+    image: node:14
+    commands:
+      - cd web
+      - yarn build
+    when:
+      branch:
+        - master
+  - name: build-storybook
+    image: node:14
+    commands:
+      - cd web
+      - yarn build:storybook
+    when:
+      branch:
+        - master
+
+---
+kind: pipeline
+type: docker
+name: API
+
+trigger:
+  event:
+    exclude:
+      - pull_request
+
+services:
+  - name: docker-in-docker
+    image: docker:dind
+    privileged: true
+    volumes:
+      - name: dockersock
+        host:
+          path: /var/run/docker.sock
+  # refer to docker-compose.test.yml for required services
+  - name: postgres
+    image: postgres:12
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ndx_poll_test
+
+volumes:
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
+  - name: cache
+    host:
+      path: /drone-cache
+
+steps:
+  - name: restore-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: cache
+        path: /cache
+    settings:
+      restore: true
+      mount:
+        - ./common/node_modules
+        - ./api/node_modules
+  - name: install-deps
+    image: node:14
+    commands:
+      - sleep 5
+      - cd common
+      - yarn install
+      - cd ..
+      - cd api
+      - yarn install
+  - name: rebuild-cache
+    image: drillster/drone-volume-cache
+    volumes:
+      - name: cache
+        path: /cache
+    settings:
+      rebuild: true
+      mount:
+        - ./common/node_modules
+        - ./api/node_modules
+  - name: check
+    image: node:14
+    commands:
+      - cd api
+      - yarn check:format
+      - yarn check:compile
+  - name: test
+    image: node:14
+    commands:
+      - cd api
+      - yarn ci:test:migrate
+      - yarn ci:test
+  - name: build-push-docker
+    image: plugins/docker
+    volumes:
+      - name: dockersock
+        path: /var/run/docker.sock
+    when:
+      branch:
+        - master
+    settings:
+      # ref: https://www.digitalocean.com/community/questions/how-can-a-cicd-system-pull-an-image-form-a-digitaloncean-registry
+      registry: registry.digitalocean.com
+      repo: registry.digitalocean.com/ndx-poll/ndx-poll-api
+      username:
+        from_secret: DO_API_TOKEN
+      password:
+        from_secret: DO_API_TOKEN
+      dockerfile: api/Dockerfile
+      tags:
+        - ${DRONE_COMMIT}
+        - latest
+      build_args:
+        - GIT_BRANCH_NAME=${DRONE_COMMIT_BRANCH}
+        - GIT_COMMIT_SHA=${DRONE_COMMIT_SHA}
+      purge: true
+      force_tag: true
+
+---
+kind: pipeline
+type: docker
+name: Infrastructure
+
+steps:
+  - name: detect drift
+    image: hashicorp/terraform
+    environment:
+      TF_VAR_do_api_token:
+        from_secret: DO_API_TOKEN
+      AWS_ACCESS_KEY_ID:
+        from_secret: AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: AWS_SECRET_ACCESS_KEY
+      TF_VAR_actual_aws_access_key_id:
+        from_secret: NDX_POLL_AWS_ACCESS_KEY_ID
+      TF_VAR_actual_aws_secret_access_key:
+        from_secret: NDX_POLL_AWS_SECRET_ACCESS_KEY
+      TF_VAR_cloudflare_api_token:
+        from_secret: NDX_POLL_CLOUDFLARE_API_TOKEN
+    commands:
+      - cd infrastructure/terraform
+      - terraform init
+      - terraform plan -detailed-exitcode
