@@ -15,5 +15,5 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true
   },
-  "include": ["src", "migrations"]
+  "include": ["<rootDir>/src", "migrations"]
 }
