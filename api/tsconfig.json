@@ -5,7 +5,7 @@
     "target": "es2019",
     "lib": ["es2020"],
     "sourceMap": true,
-    "allowJs": true,
+    "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
