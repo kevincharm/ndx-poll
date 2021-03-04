@@ -1,1 +1,1 @@
-web: cd api && yarn prod:migrate && yarn prod:start
+web: yarn && cd api && yarn prod:migrate && yarn prod:start
