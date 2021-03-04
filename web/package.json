@@ -4,7 +4,7 @@
   "description": "NDX Poll web app frontend.",
   "scripts": {
     "start": "yarn parcel src/index.html",
-    "build": "yarn parcel build src/index.html",
+    "build": "yarn parcel build src/index.html --no-scope-hoist",
     "test": "yarn jest",
     "test:watch": "yarn jest --watch",
     "check:format": "yarn prettier --check \"src/**/*.ts\"",
