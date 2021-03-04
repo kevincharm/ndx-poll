@@ -9,7 +9,8 @@
     "install:web": "cd web && yarn install && cd ..",
     "build:web": "cd web && yarn build && cd ..",
     "install:api": "cd api && yarn install && cd ..",
-    "build:api": "cd api && yarn build && cd .."
+    "build:api": "cd api && yarn build && cd ..",
+    "postinstall": "yarn install:common && yarn install:api"
   },
   "repository": {
     "type": "git",
