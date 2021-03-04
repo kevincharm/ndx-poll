@@ -11,7 +11,9 @@ const knexConfig: knex.Config = {
         host: config.pgHost,
         port: config.pgPort,
         database: config.pgDatabase,
-        ssl: true,
+        ssl: {
+            rejectUnauthorized: false,
+        },
     },
     migrations: {
         extension: 'ts',
