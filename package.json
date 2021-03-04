@@ -7,8 +7,7 @@
     "start": "cd api && yarn prod:migrate && yarn prod:start",
     "install:common": "cd common && yarn install && cd ..",
     "install:web": "cd web && yarn install && cd ..",
-    "install:api": "cd api && yarn install && cd ..",
-    "postinstall": "yarn install:common && yarn install:web && yarn install:api"
+    "install:api": "cd api && yarn install && cd .."
   },
   "repository": {
     "type": "git",
