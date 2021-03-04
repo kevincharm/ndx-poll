@@ -17,7 +17,7 @@
     "test:migrate": "yarn env-cmd -f .env.test ts-node src/db/migrator.ts",
     "ci:test": "LOG_LEVEL=silent yarn env-cmd -f .env.ci yarn jest --ci --colors --coverage --forceExit --runInBand --detectOpenHandles",
     "ci:test:migrate": "yarn env-cmd -f .env.ci ts-node src/db/migrator.ts",
-    "prod:migrate": "node src/db/migrator.js",
+    "prod:migrate": "yarn ts-node ./src/db/migrator.ts",
     "prod:start": "node src/index.js"
   },
   "author": "Kevin Tjiam <kevin@kevincharm.com>",
