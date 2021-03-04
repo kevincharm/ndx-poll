@@ -14,7 +14,12 @@ export default app
 
 app.set('query parser', (query: string) => qs.parse(query))
 app.use(expressPinoLogger({ logger: log }))
-app.use(cors())
+app.use(
+    cors({
+        allowedHeaders: '*',
+        origin: '*',
+    })
+)
 app.use(bodyParser.json())
 app.use(passport.initialize())
 
