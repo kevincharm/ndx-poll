@@ -23,6 +23,15 @@
   "author": "Kevin Tjiam <kevin@kevincharm.com>",
   "license": "UNLICENSED",
   "devDependencies": {
+    "env-cmd": "^10.1.0",
+    "jest": "^26.1.0",
+    "prettier": "^2.1.1",
+    "supertest": "^4.0.2",
+    "ts-jest": "^26.4.0",
+    "ts-node-dev": "^1.0.0-pre.51",
+    "typescript": "^4.0.2"
+  },
+  "dependencies": {
     "@types/aws-sdk": "^2.7.0",
     "@types/body-parser": "^1.19.0",
     "@types/cors": "^2.8.6",
@@ -41,15 +50,6 @@
     "@types/supertest": "^2.0.10",
     "@types/uuid": "^8.0.0",
     "@types/ws": "^7.2.7",
-    "env-cmd": "^10.1.0",
-    "jest": "^26.1.0",
-    "prettier": "^2.1.1",
-    "supertest": "^4.0.2",
-    "ts-jest": "^26.4.0",
-    "ts-node-dev": "^1.0.0-pre.51",
-    "typescript": "^4.0.2"
-  },
-  "dependencies": {
     "argon2": "^0.26.2",
     "aws-sdk": "^2.716.0",
     "body-parser": "^1.19.0",
